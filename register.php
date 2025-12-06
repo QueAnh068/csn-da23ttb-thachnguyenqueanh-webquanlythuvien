@@ -2,8 +2,8 @@
 include("connect.php");
 session_start();
 
-$hotenErr = $tenErr = $passwordErr = $repasswordErr = "";
-$hoten = $ten = $password = $repassword = "";
+$hotenErr = $tenErr = $passwordErr = $repasswordErr = $emailErr ="";
+$hoten = $ten = $password = $repassword = $email = "";
 
 // Xử lý khi nhấn nút đăng ký
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -12,6 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ten = test_input($_POST["ten"]);
     $password = test_input($_POST["password"]);
     $repassword = test_input($_POST["repassword"]);
+    $repassword = test_input($_POST["email"]);
 
     // Kiểm tra họ tên
     if (empty($hoten)) {
@@ -39,6 +40,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $repasswordErr = "Mật khẩu nhập lại không khớp";
     }
 
+
+    $email = "example@gmail.com";
+    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Email hợp lệ";
+    } else {
+        echo "Email không hợp lệ";
+    }
+
+    $email = trim($_POST['email']);
+    $sql = "SELECT * FROM ql_user WHERE Email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        echo "Email đã tồn tại";
+    } else {
+        echo "Email có thể sử dụng";
+    }
     // Nếu không có lỗi
     if (empty($hotenErr) && empty($passwordErr) && empty($repasswordErr)) {
         // Kiểm tra tên đăng nhập đã tồn tại chưa
@@ -55,9 +76,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
 
             // Thêm user mới với role = 'user'
-            $sql = "INSERT INTO ql_user (HoTen, TenDN, MatKhau, role) VALUES (?, ?, ?, 'user')";
+            $sql = "INSERT INTO ql_user (HoTen, TenDN, MatKhau, role, Lop, Khoa, Email) VALUES (?, ?, ?, 'user', ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sss", $hoten, $ten, $hashed_pw);
+            $stmt->bind_param("ssssss", $hoten, $ten, $hashed_pw, $lop, $khoa, $email);
 
             if ($stmt->execute()) {
                 echo "<script>
@@ -125,6 +146,11 @@ function test_input($data) {
                                             <span class="text-danger small"><?php echo $repasswordErr; ?></span>
                                         </div><br>
 
+                                        <div class="form-group">
+                                            <input type="email" class="form-control form-control-user" name="email" placeholder="Email">
+                                            <span class="text-danger small"><?php echo $emailErr; ?></span>
+                                        </div><br>
+                
                                         <button type="submit" class="btn btn-outline-success btn-user btn-block">Đăng ký</button>
                                     </form>
 

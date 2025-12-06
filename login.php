@@ -1,28 +1,23 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 include("connect.php"); // Kết nối database
 
-// Khai báo các biến
 $ten = $password = "";
 $tenErr = $passwordErr = $error = "";
 
 // Khi người dùng bấm Đăng nhập
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Lấy dữ liệu từ form
     $ten = isset($_POST['ten']) ? trim($_POST['ten']) : '';
     $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
-    // Kiểm tra nhập thiếu
-    if (empty($ten)) {
-        $tenErr = "⚠️ Vui lòng nhập tên đăng nhập!";
-    }
-    if (empty($password)) {
-        $passwordErr = "⚠️ Vui lòng nhập mật khẩu!";
-    }
+    if (empty($ten)) $tenErr = "⚠️ Vui lòng nhập tên đăng nhập!";
+    if (empty($password)) $passwordErr = "⚠️ Vui lòng nhập mật khẩu!";
 
-    // Nếu không có lỗi
     if (empty($tenErr) && empty($passwordErr)) {
-        // Chuẩn bị truy vấn
         $sql = "SELECT * FROM ql_user WHERE TenDN = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $ten);
@@ -32,23 +27,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result && $result->num_rows == 1) {
             $row = $result->fetch_assoc();
 
-            // So sánh mật khẩu đã hash
             if (password_verify($password, $row['MatKhau'])) {
-                // Lưu session
-                $_SESSION['HoTen'] = $row['HoTen'];
-                $_SESSION['TenDN'] = $row['TenDN'];
-                $_SESSION['role'] = $row['role'];
-                $_SESSION['ID'] = $row['ID'];
+                if ($row['role'] === 'user') {
+                    // Lưu session riêng cho user
+                    $_SESSION['user_HoTen'] = $row['HoTen'];
+                    $_SESSION['user_TenDN'] = $row['TenDN'];
+                    $_SESSION['user_role'] = $row['role'];
+                    $_SESSION['user_ID'] = $row['ID'];
 
-                // Phân quyền
-                if ($row['role'] === 'admin') {
-                    header("Location: admin/index.php");
+                    header("Location: index_user.php");
                     exit();
                 } else {
-                    header("Location: index.php");
-                    exit();
+                    $error = "❌ Bạn không có quyền truy cập trang này!";
                 }
-                exit();
             } else {
                 $error = "❌ Sai mật khẩu!";
             }

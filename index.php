@@ -186,6 +186,10 @@ $highlight_result = mysqli_query($conn, $highlight_sql);
                             <a href="borrow.php?id=<?php echo $row['ID']; ?>" class="btn btn-success mt-auto w-100">
                                 <i class="bi bi-book"></i> Mượn sách
                             </a>
+
+                            <a href="chitietsach.php?id=<?php echo $row['ID']; ?>" class="btn btn-primary flex-fill">
+                                    <i class="bi bi-info-circle"></i> Chi tiết sách
+                                </a>
                         </div>
 
                     </div>
