@@ -1,5 +1,5 @@
 <?php
-include("connect.php"); 
+include("../connect.php"); 
 
 // Lấy từ khóa tìm kiếm
 $search = "";
@@ -86,10 +86,11 @@ $result = mysqli_query($conn, $sql);
                                         <td>{$row['TenSach']}</td>
                                         <td>{$row['TenTG']}</td>
                                         <td>
-                                            <img src='admin/image/{$row['AnhBia']}'
+                                            <img src='../image/{$row['AnhBia']}'
                                                 alt='Ảnh bìa'
                                                 style='width: 80px; height: 120px; object-fit: cover;'>
                                         </td>
+                                        
                                         <td>{$row['NhaXB']}</td>
                                         <td>{$row['SoLuong']}</td>
                                         <td>{$row['TinhTrang']}</td>

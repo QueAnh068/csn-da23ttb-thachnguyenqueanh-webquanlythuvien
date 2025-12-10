@@ -1,13 +1,13 @@
 <?php
 session_start();
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header("Location: login.php");
+include("../connect.php");
+if( !isset($_SESSION['tenadmin'])) {
+  header('Location: ../login.php');
+}
+if ($_SESSION['role'] != 'admin') {
+    header("Location: ../login.php");
     exit();
 }
-
-$page = isset($_GET['pages']) ? $_GET['pages'] : 'dashboar';
-
-include("connect.php");
 
 // Xử lý trả sách nếu admin bấm trả
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == "tra") {
@@ -68,7 +68,7 @@ $result = mysqli_query($conn, $sql);
                         $page = $_GET['pages'];
 
                         // Tạo đường dẫn file module
-                        $file = "pages/" . $page . ".php";
+                        $file = $page . ".php";
 
                         // Kiểm tra file có tồn tại không
                         if (file_exists($file)) {
@@ -79,49 +79,6 @@ $result = mysqli_query($conn, $sql);
                         }
                     }
                     ?>
-<!-- 4 hộp thống kê -->
-    <div class="row">
-      <div class="col-lg-3 col-6">
-        <div class="small-box bg-primary">
-          <div class="inner">
-            <h3>150</h3>
-            <p>Tổng số</p>
-          </div>
-          <div class="icon"><i class="fa-solid fa-cart-shopping"></i></div>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-6">
-        <div class="small-box bg-success">
-          <div class="inner">
-            <h3>53<sup style="font-size: 20px">%</sup></h3>
-            <p>Sách</p>
-          </div>
-          <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-6">
-        <div class="small-box bg-warning">
-          <div class="inner">
-            <h3>44</h3>
-            <p>Sinh viên</p>
-          </div>
-          <div class="icon"><i class="fa-solid fa-user-plus"></i></div>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-6">
-        <div class="small-box bg-danger">
-          <div class="inner">
-            <h3>65</h3>
-            <p>Lượng truy cập</p>
-          </div>
-          <div class="icon"><i class="fa-solid fa-chart-pie"></i></div>
-        </div>
-      </div>
-    </div>
-
                 <!-- Bảng danh sách sinh viên -->
     <div class="card">
       <div class="card-header bg-primary text-white">

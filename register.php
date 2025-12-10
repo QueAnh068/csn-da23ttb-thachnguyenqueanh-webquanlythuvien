@@ -2,17 +2,13 @@
 include("connect.php");
 session_start();
 
-$hotenErr = $tenErr = $passwordErr = $repasswordErr = $emailErr ="";
-$hoten = $ten = $password = $repassword = $email = "";
-
 // Xử lý khi nhấn nút đăng ký
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (isset($_POST['dangky'])) {
     // Lấy dữ liệu và lọc đầu vào
-    $hoten = test_input($_POST["hoten"]);
-    $ten = test_input($_POST["ten"]);
-    $password = test_input($_POST["password"]);
-    $repassword = test_input($_POST["repassword"]);
-    $repassword = test_input($_POST["email"]);
+    $hoten = $_POST["hoten"];
+    $ten = $_POST["ten"];
+    $password = $_POST["password"];
+    $email = $_POST["email"];
 
     // Kiểm tra họ tên
     if (empty($hoten)) {
@@ -32,14 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (strlen($password) < 4) {
         $passwordErr = "Mật khẩu phải có ít nhất 4 ký tự";
     }
-
-    // Kiểm tra nhập lại mật khẩu
-    if (empty($repassword)) {
-        $repasswordErr = "Vui lòng nhập lại mật khẩu";
-    } elseif ($repassword != $password) {
-        $repasswordErr = "Mật khẩu nhập lại không khớp";
-    }
-
 
     $email = "example@gmail.com";
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -73,12 +61,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<p style='color:red; text-align:center;'>❌ Tên đăng nhập đã tồn tại!</p>";
         } else {
             // Mã hóa mật khẩu
-            $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
-
+           // $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
+             $hashed_pw = md5($password);
             // Thêm user mới với role = 'user'
-            $sql = "INSERT INTO ql_user (HoTen, TenDN, MatKhau, role, Lop, Khoa, Email) VALUES (?, ?, ?, 'user', ?, ?)";
+            $sql = "INSERT INTO ql_user (HoTen, TenDN, MatKhau, role, Email) VALUES (?, ?, ?, 'user', ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssssss", $hoten, $ten, $hashed_pw, $lop, $khoa, $email);
+            $stmt->bind_param("ssss", $hoten, $ten, $hashed_pw, $email);
 
             if ($stmt->execute()) {
                 echo "<script>
@@ -92,13 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
-// Hàm lọc dữ liệu đầu vào
-function test_input($data) {
-    return htmlspecialchars(stripslashes(trim($data)));
-}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -123,35 +105,26 @@ function test_input($data) {
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Đăng ký tài khoản</h1>
                                     </div>
-
-                                    <form class="user" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                                    
+                                    <form  method="post" action="">
 
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-user" name="hoten" placeholder="Họ và tên" value="<?php echo $hoten; ?>">
-                                            <span class="text-danger small"><?php echo $hotenErr; ?></span>
+                                            <input type="text" class="form-control form-control-user" name="hoten" placeholder="Họ và tên" required>
                                         </div><br>
 
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-user" name="ten" placeholder="Tên đăng nhập" value="<?php echo $ten; ?>">
-                                            <span class="text-danger small"><?php echo $tenErr; ?></span>
+                                            <input type="text" class="form-control form-control-user" name="ten" placeholder="Tên đăng nhập" require>
                                         </div><br>
 
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user" name="password" placeholder="Mật khẩu">
-                                            <span class="text-danger small"><?php echo $passwordErr; ?></span>
+                                            <input type="password" class="form-control form-control-user" name="password" placeholder="Mật khẩu" require>
                                         </div><br>
 
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user" name="repassword" placeholder="Nhập lại mật khẩu">
-                                            <span class="text-danger small"><?php echo $repasswordErr; ?></span>
-                                        </div><br>
-
-                                        <div class="form-group">
-                                            <input type="email" class="form-control form-control-user" name="email" placeholder="Email">
-                                            <span class="text-danger small"><?php echo $emailErr; ?></span>
+                                            <input type="email" class="form-control form-control-user" name="email" placeholder="Email" require>
                                         </div><br>
                 
-                                        <button type="submit" class="btn btn-outline-success btn-user btn-block">Đăng ký</button>
+                                        <button type="submit" name="dangky" class="btn btn-outline-success btn-user btn-block">Đăng ký</button>
                                     </form>
 
                                     <hr>

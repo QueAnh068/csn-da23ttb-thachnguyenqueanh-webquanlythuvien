@@ -2,7 +2,7 @@
 include("connect.php"); // file kết nối CSDL
 session_start();
 
-$loggedIn = isset($_SESSION['TenDN']) && $_SESSION['role'] == 'user';
+$loggedIn = isset($_SESSION['tenuser']) && $_SESSION['role'] == 'user';
 
 $search = isset($_GET['search']) ? trim($_GET['search']) : "";
 $theloai = isset($_GET['theloai']) ? trim($_GET['theloai']) : "";
@@ -23,8 +23,6 @@ if (count($where) > 0) {
     $sql .= " WHERE " . implode(" AND ", $where);
 }
 $result = mysqli_query($conn, $sql);
-
-
 
 // Sách tiêu biểu (6 sách mới nhất)
 $highlight_sql = "SELECT * FROM ql_sach ORDER BY ID DESC LIMIT 8";
@@ -77,15 +75,15 @@ $highlight_result = mysqli_query($conn, $highlight_sql);
                         ?>
                     </ul>
                 </li>
-                <?php if (isset($_SESSION['TenDN'])): ?>
+                <?php if (isset($_SESSION['tenuser'])): ?>
                 <li class="nav-item mx-3">
-                    <a class="nav-link text-white fw-semibold" href="index_user.php">Lịch sử mượn</a>
+                    <a class="nav-link text-white fw-semibold" href="user/lsmuon.php">Lịch sử mượn</a>
                 </li>
             <?php endif; ?>
             </ul>
             
             
-            <form class="d-flex mx-3" method="get" action="search.php">
+            <form class="d-flex mx-3" method="get" action="user/search.php">
                 <input class="form-control form-control-sm" type="search" name="search" placeholder="Tìm kiếm sách hoặc tác giả..." value="<?php echo htmlspecialchars($search); ?>">
                 <button class="btn btn-outline-light btn-sm ms-2" type="submit">Tìm</button>
             </form>
@@ -94,16 +92,16 @@ $highlight_result = mysqli_query($conn, $highlight_sql);
             <div class="dropdown user-dropdown mx-3">
                 <div class="d-flex align-items-center text-white" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-person-circle fs-5 me-1"></i>
-                    <?php if (isset($_SESSION['TenDN'])): ?>
-                        <span class="fw-semibold"><?php echo htmlspecialchars($_SESSION['TenDN']); ?></span>
+                    <?php if (isset($_SESSION['tenuser'])): ?>
+                        <span class="fw-semibold"><?php echo htmlspecialchars($_SESSION['tenuser']); ?></span>
                     <?php else: ?>
                         <span class="fw-semibold">Tài khoản</span>
                     <?php endif; ?>
                 </div>
 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <?php if (isset($_SESSION['TenDN'])): ?>
-                        <li><a class="dropdown-item" href="#">👋 Xin chào, <?php echo htmlspecialchars($_SESSION['TenDN']); ?></a></li>
+                    <?php if (isset($_SESSION['tenuser'])): ?>
+                        <li><a class="dropdown-item" href="#">👋 Xin chào, <?php echo htmlspecialchars($_SESSION['tenuser']); ?></a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="logout.php">Đăng xuất</a></li>
                     <?php else: ?>
@@ -141,14 +139,14 @@ $highlight_result = mysqli_query($conn, $highlight_sql);
                             <p class="card-text mb-3"><small class="text-muted"><?php echo $row['TheLoai']; ?></small></p>
 
                             <div class="d-flex gap-2">
-                                <form action="borrow.php" method="POST" class="flex-fill">
+                                <form action="user/borrow.php" method="POST" class="flex-fill">
                                     <input type="hidden" name="id" value="<?php echo $row['ID']; ?>">
                                     <button type="submit" class="btn btn-success w-100">
                                         <i class="bi bi-book"></i> Mượn sách
                                     </button>
                                 </form>
 
-                                <a href="chitietsach.php?id=<?php echo $row['ID']; ?>" class="btn btn-primary flex-fill">
+                                <a href="user/chitietsach.php?id=<?php echo $row['ID']; ?>" class="btn btn-primary flex-fill">
                                     <i class="bi bi-info-circle"></i> Chi tiết sách
                                 </a>
                             </div>
@@ -183,11 +181,11 @@ $highlight_result = mysqli_query($conn, $highlight_sql);
                             <p class="card-text mb-1 text-secondary"><?php echo $row['TenTG']; ?></p>
                             <p class="card-text mb-3"><small class="text-muted"><?php echo $row['TheLoai']; ?></small></p>
 
-                            <a href="borrow.php?id=<?php echo $row['ID']; ?>" class="btn btn-success mt-auto w-100">
+                            <a href="user/borrow.php?id=<?php echo $row['ID']; ?>" class="btn btn-success mt-auto w-100">
                                 <i class="bi bi-book"></i> Mượn sách
                             </a>
 
-                            <a href="chitietsach.php?id=<?php echo $row['ID']; ?>" class="btn btn-primary flex-fill">
+                            <a href="user/chitietsach.php?id=<?php echo $row['ID']; ?>" class="btn btn-primary flex-fill">
                                     <i class="bi bi-info-circle"></i> Chi tiết sách
                                 </a>
                         </div>

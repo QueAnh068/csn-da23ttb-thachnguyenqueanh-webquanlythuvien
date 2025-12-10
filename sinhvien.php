@@ -1,9 +1,5 @@
-<?php include("connect.php");
-    // Chỉ admin mới được truy cập
-// if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-//     echo "<p class='text-danger'>Bạn không có quyền truy cập trang này.</p>";
-//     exit();
-// }
+<?php include("../connect.php");
+
 // Lấy dữ liệu sinh viên từ MySQL
 $sql = "SELECT * FROM ql_user WHERE role = 'user' ORDER BY ID ASC";
 $result = mysqli_query($conn, $sql);

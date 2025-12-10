@@ -1,5 +1,6 @@
 <?php
-include("connect.php"); // Kết nối CSDL
+include("../connect.php"); // Kết nối CSDL
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $theloai = $_POST['TheLoai'];

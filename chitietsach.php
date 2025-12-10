@@ -1,5 +1,5 @@
 <?php
-include("connect.php"); // Kết nối CSDL
+include("../connect.php"); // Kết nối CSDL
 
 // Lấy ID sách từ URL
 $sach_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
@@ -50,7 +50,6 @@ $result_chuong = $stmt_chuong->get_result();
 <div class="container">
 
     <h1 class="mb-4"><?php echo htmlspecialchars($sach['TenSach']); ?></h1>
-
     <div class="card shadow-sm p-3 mb-4">
         <div class="row g-3 align-items-start">
             <!-- Ảnh bìa -->
@@ -78,10 +77,10 @@ $result_chuong = $stmt_chuong->get_result();
                 <p><strong>Mô tả:</strong> <?php echo nl2br(htmlspecialchars($sach['MoTa'])); ?></p>
 
                 <!-- Nút Mượn & Chi tiết -->
-                <div class="btn-group-custom">
-                    <a href="borrow.php?id=<?php echo $sach['ID']; ?>" class="btn btn-success">Mượn sách</a>
-                    <a href="chitietsach.php?id=<?php echo $sach['ID']; ?>" class="btn btn-primary">Chi tiết</a>
-                </div>
+                <form action="borrow.php" method="POST">
+                    <input type="hidden" name="id" value="<?php echo $sach['ID']; ?>">
+                    <button type="submit">Mượn</button>
+                </form>
             </div>
         </div>
     </div>
@@ -98,7 +97,9 @@ $result_chuong = $stmt_chuong->get_result();
     <?php else: ?>
         <p>Chưa có chương nào được thêm vào sách này.</p>
     <?php endif; ?>
-
+    <div class="text-center">
+        <a href="../index.php" class="btn btn-outline-primary">← Quay lại danh sách sách</a>
+    </div>
 </div>
 
 </body>

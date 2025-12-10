@@ -1,11 +1,7 @@
 
  <?php
-    include("connect.php"); // file kết nối CSDL
-    // Chỉ admin mới được truy cập
-// if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-//     echo "<p class='text-danger'>Bạn không có quyền truy cập trang này.</p>";
-//     exit();
-// }
+    include("../connect.php"); // file kết nối CSDL
+
 
 // Xử lý trả sách nếu admin bấm trả
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == "tra") {
@@ -91,58 +87,62 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
                                 </tr>
                             </thead>
                             <tbody>
+                                
+            <?php
+if ($result && $result->num_rows > 0) {
 
-                            <?php
-              if ($result && $result->num_rows > 0) {
-                  // BẮT ĐẦU vòng while với ngoặc { }
-                  while ($row = $result->fetch_assoc()) {
-                      // escape dữ liệu trước khi hiển thị
-                      $id = htmlspecialchars($row['ID']);
-                      $idsach = htmlspecialchars($row['IDsach']);
-                      $iduser = htmlspecialchars($row['IDuser']);
-                      $ngayMuon = htmlspecialchars($row['NgayMuon']);
-                      $ngayTra = $row['NgayTra'] ? htmlspecialchars($row['NgayTra']) : '';
-                      $trangThai = htmlspecialchars($row['TrangThai']);
+    while ($row = $result->fetch_assoc()) {
 
-                      echo "<tr>";
-                      echo "<td>{$id}</td>";
-                      echo "<td>{$idsach}</td>";
-                      echo "<td>{$iduser}</td>";
-                      echo "<td>{$ngayMuon}</td>";
-                      echo "<td>{$ngayTra}</td>";
-                      echo "<td>{$trangThai}</td>";
-                      echo "<td>";
+        // escape dữ liệu
+        $id        = htmlspecialchars($row['ID']);
+        $idsach    = htmlspecialchars($row['IDsach']);
+        $iduser    = htmlspecialchars($row['IDuser']);
+        $ngayMuon  = htmlspecialchars($row['NgayMuon']);
+        $ngayTra   = $row['NgayTra'] ? htmlspecialchars($row['NgayTra']) : '';
+        $trangThai = htmlspecialchars($row['TrangThai']);
 
-                      if ($row['TrangThai'] === 'Đang mượn') {
-                          // form gửi về chính file này; có input action=tra để xử lý phía trên
-                          echo '<form method="POST" style="margin:0;">';
-                          echo '<input type="hidden" name="action" value="tra">';
-                          echo '<input type="hidden" name="maMuon" value="'.$id.'">';
-                          echo '<input type="hidden" name="maSach" value="'.$idsach.'">';
-                          echo '<button type="submit" class="btn btn-warning btn-sm">Xác nhận trả sách</button>';
-                          echo '</form>';
-                      } else {
-                          echo '<span class="text-success">Đã trả</span><br>';
-                          if ($ngayTra) {
-                              echo '<small>'.$ngayTra.'</small>';
-                          }
-                      }
+        echo "<tr>";
+        echo "<td>{$id}</td>";
+        echo "<td>{$idsach}</td>";
+        echo "<td>{$iduser}</td>";
+        echo "<td>{$ngayMuon}</td>";
+        echo "<td>{$ngayTra}</td>";
+        echo "<td>{$trangThai}</td>";
 
-                      echo "</td>";
-                      echo "</tr>";
-                  } // KẾT THÚC while
-              } else {
-                  echo "<tr><td colspan='7'>Chưa có dữ liệu mượn trả.</td></tr>";
-              }
-              ?>
+        echo "<td>";
+
+        // Nút trả sách
+        if ($row['TrangThai'] === 'Đang mượn') {
+            echo '<form method="POST" style="margin:0;">';
+            echo '<input type="hidden" name="action" value="tra">';
+            echo '<input type="hidden" name="maMuon" value="'.$id.'">';
+            echo '<input type="hidden" name="maSach" value="'.$idsach.'">';
+            echo '<button type="submit" class="btn btn-warning btn-sm">Xác nhận trả sách</button>';
+            echo '</form>';
+        } else {
+            echo '<span class="text-success">Đã trả</span><br>';
+            if ($ngayTra) {
+                echo '<small>'.$ngayTra.'</small>';
+            }
+        }
+
+        // Nút sửa – xóa
+        echo "<br>";
+        echo "<a href='sua.php?table=ql_muontra&ID={$id}' class='btn btn-warning btn-sm mt-1'>Sửa</a> ";
+        echo "<a href='xoa.php?table=ql_muontra&ID={$id}' class='btn btn-danger btn-sm mt-1'>Xóa</a>";
+
+        echo "</td>";
+        echo "</tr>";
+    }
+
+} else {
+    echo "<tr><td colspan='7'>Chưa có dữ liệu mượn trả.</td></tr>";
+}
+?>
+
               
                         </tbody>
                     </table>
-                </div>
-                <!-- Nut -->
-                <div class="mb-3">
-                    <a href="sua.php" class="btn btn-warning">Sửa </a>
-                    <a href="xoa.php" class="btn btn-danger">Xóa </a>
                 </div>
             </div>
         </div>

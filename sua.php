@@ -1,5 +1,5 @@
 <?php
-include("connect.php");
+include("../connect.php");
 
 // Lấy tham số an toàn
 $table = isset($_GET['table']) ? $_GET['table'] : null;
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $updateSQL = "UPDATE `$table` SET $setString WHERE `$pk` = '" . mysqli_real_escape_string($conn, $id) . "'";
         if (mysqli_query($conn, $updateSQL)) {
             // Chuyển về trang danh sách của bảng
-            header("Location: sinhvien.php?table=" . urlencode($table));
+            header("Location: admin_dashboard.php?table=" . urlencode($table));
             exit;
         } else {
             echo "Lỗi khi cập nhật: " . mysqli_error($conn);

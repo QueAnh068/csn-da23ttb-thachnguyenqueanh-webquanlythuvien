@@ -2,7 +2,8 @@
 include("admin/header.php"); 
 include("admin/sidebar.php"); 
 include("admin/navbar.php"); 
-include("pages/connect.php"); // Kết nối CSDL
+include("../connect.php"); // Kết nối CSDL
+session_start();
 ?>
 
 <!-- Begin Page Content -->

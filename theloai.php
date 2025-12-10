@@ -1,10 +1,6 @@
  <?php
-    include("connect.php"); // file kết nối CSDL
-        // Chỉ admin mới được truy cập
-// if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-//     echo "<p class='text-danger'>Bạn không có quyền truy cập trang này.</p>";
-//     exit();
-// }
+    include("../connect.php"); // file kết nối CSDL
+    // session_start();
 
     $idErr = $hotenErr = "";
     $id = $hoten = "";
@@ -52,7 +48,7 @@
     if ($search_safe != "") {
         $sql = "SELECT * FROM ql_theloai WHERE TenTL LIKE '%$search_safe%'";
     } else {
-        $sql = "SELECT * FROM ql_theloai ORDER BY MaTL DESC";
+        $sql = "SELECT * FROM ql_theloai ORDER BY ID DESC";
     }
     $result = mysqli_query($conn, $sql);
 ?> 
@@ -69,15 +65,6 @@
     <div class="container mt-3">
         <div class="card">
             <div class="card-header">
-                <header>
-                    <!-- PHẦN TIÊU ĐỀ -->
-                    <div class="container-fluid py-4 bg-primary text-white text-center position-relative">
-                        <img src="image/1.jpg" 
-                            alt="Logo Trường Đại Học Trà Vinh" 
-                            class="position-absolute start-0 ms-4 top-50 translate-middle-y rounded" 
-                            width="60" height="60">
-                        <h1 class="fw-bold m-0">THƯ VIỆN TRƯỜNG ĐẠI HỌC TRÀ VINH</h1>
-                    </div> 
                     <nav class="navbar navbar-expand-sm bg-primary navbar-dark justify-content-center py-2">
                         <div class="container-fluid justify-content-center flex-wrap">
                             <!-- Ô tìm kiếm -->
@@ -88,31 +75,7 @@
                         </form>
                         </div>
                     </nav>
-                </header>
             </div>
-
-    <!-- form quản lý thẻ loại -->
-            <div class="card-body  text-black " style="background-color: #b3e5fc;">
-                <h3>Form thể loại</h3><br>
-                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" name="book" method="post" id="login">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">@</span>
-                            <input type="text" class="form-control" placeholder="Mã thể loại" name="id" value="<?php echo $id;?>">
-                            <span class="error">* <?php echo $idErr;?></span>
-                        </div><br>
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">@</span>
-                            <input type="text" class="form-control" placeholder="Tên thể loại" name="name" value="<?php echo $id;?>">
-                            <span class="error">* <?php echo $idErr;?></span>
-                        </div><br>
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Ngày mượn</span>
-                            <input type="date" class="form-control" name="date" value="">
-                        </div><br>
-                        <button type="submit">Cập nhật</button>
-                    </form><br>
             <!-- Bảng danh sách sinh viên -->
                 <div class="container mt-3">
                     <h3>Quản lý thể loại</h3><br>
@@ -126,7 +89,7 @@
                         </thead>
                         <tbody>
                             <?php
-                                $sql = "SELECT * FROM ql_theloai ORDER BY MaTL DESC";
+                                $sql = "SELECT * FROM ql_theloai ORDER BY ID DESC";
                                 $result = $conn->query($sql);
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
@@ -134,8 +97,8 @@
                                                 <td>{$row['MaSV']}</td>
                                                 <td>{$row['TenTL']}</td>
                                                 <td>
-                                                    <a href='sua.php?id={$row['MaTL']}' class='btn btn-warning btn-sm'>Sửa</a>
-                                                    <a href='xoa.php?id={$row['MaTL']}' class='btn btn-danger btn-sm' onclick=\"return confirm('Bạn có chắc muốn xóa thể loại sách này không?')\">Xóa</a>
+                                                    <a href='sua.php?id={$row['ID']}' class='btn btn-warning btn-sm'>Sửa</a>
+                                                    <a href='xoa.php?id={$row['ID']}' class='btn btn-danger btn-sm' onclick=\"return confirm('Bạn có chắc muốn xóa thể loại sách này không?')\">Xóa</a>
                                                 </td>
                                             </tr>";
                                         }      

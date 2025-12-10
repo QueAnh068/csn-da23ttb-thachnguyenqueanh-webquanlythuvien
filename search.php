@@ -1,5 +1,5 @@
 <?php
-include("connect.php"); // Kết nối CSDL
+include("../connect.php"); // Kết nối CSDL
 
 // Lấy từ khóa người dùng nhập
 $search = "";
@@ -98,7 +98,9 @@ $result = mysqli_query($conn, $sql);
         }
     }
     ?>
-
+    <div class="text-center">
+        <a href="../index.php" class="btn btn-outline-primary">← Quay lại danh sách sách</a>
+    </div>
 </div>
 
 <!-- Bootstrap JS -->

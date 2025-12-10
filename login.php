@@ -1,54 +1,56 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 session_start();
 include("connect.php"); // Kết nối database
 
-$ten = $password = "";
-$tenErr = $passwordErr = $error = "";
+if(isset($_POST['dangnhap'])){
 
-// Khi người dùng bấm Đăng nhập
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $ten = isset($_POST['ten']) ? trim($_POST['ten']) : '';
-    $password = isset($_POST['password']) ? trim($_POST['password']) : '';
+    $ten = $_POST['ten'];
+    $password = $_POST['password'];
+    $hashed_pw = md5($password);
 
-    if (empty($ten)) $tenErr = "⚠️ Vui lòng nhập tên đăng nhập!";
-    if (empty($password)) $passwordErr = "⚠️ Vui lòng nhập mật khẩu!";
+        // check user
+    if (!empty($ten) && !empty($password)) {       
+        $sql = "SELECT * FROM ql_user  WHERE TenDN = '$ten' AND MatKhau = '$hashed_pw'";
+          //  $stmt = $conn->prepare($sql);
+        $rs=$conn->query($sql);
+        $kq=$rs->fetch_assoc();
 
-    if (empty($tenErr) && empty($passwordErr)) {
-        $sql = "SELECT * FROM ql_user WHERE TenDN = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $ten);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        // Lấy nhiều dòng
+        if ($kq) {
 
-        if ($result && $result->num_rows == 1) {
-            $row = $result->fetch_assoc();
+            // role lấy thẳng từ DB
+            $role = $kq['role'];
 
-            if (password_verify($password, $row['MatKhau'])) {
-                if ($row['role'] === 'user') {
-                    // Lưu session riêng cho user
-                    $_SESSION['user_HoTen'] = $row['HoTen'];
-                    $_SESSION['user_TenDN'] = $row['TenDN'];
-                    $_SESSION['user_role'] = $row['role'];
-                    $_SESSION['user_ID'] = $row['ID'];
+            if ($role == "admin") {
 
-                    header("Location: index_user.php");
-                    exit();
-                } else {
-                    $error = "❌ Bạn không có quyền truy cập trang này!";
-                }
+                $_SESSION['role'] = $role;
+                $_SESSION['tenadmin'] = $kq['TenDN'];
+              
+                header("Location: ../admin/admin_dashboard.php");
+             //   exit();
+
             } else {
-                $error = "❌ Sai mật khẩu!";
+
+                $_SESSION['role'] = $role;
+                $_SESSION['tenuser'] = $kq['TenDN'];
+               
+                header("Location: index.php");
+             //   exit();
+
             }
+            echo $role;
+
         } else {
-            $error = "❌ Tên đăng nhập không tồn tại!";
+            echo "Tài khoản hoặc mật khẩu sai";
         }
+
+    } else {
+        echo "Vui lòng nhập đầy đủ thông tin";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -78,18 +80,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </div>
                                 <?php endif; ?>
 
-                                <form class="user" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                                <form class="user" action="" method="post">
                                     <div class="form-group">
-                                        <input type="text" class="form-control form-control-user" placeholder="Tên đăng nhập" name="ten" value="<?php echo htmlspecialchars($ten); ?>">
-                                        <small class="text-danger"><?php echo $tenErr; ?></small>
+                                        <input type="text" class="form-control form-control-user" placeholder="Tên đăng nhập" name="ten" required>
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="password" class="form-control form-control-user" placeholder="Mật khẩu" name="password">
-                                        <small class="text-danger"><?php echo $passwordErr; ?></small>
+                                        <input type="password" class="form-control form-control-user" placeholder="Mật khẩu" name="password" required>
                                     </div>
 
-                                    <button type="submit" class="btn btn-primary btn-user btn-block">
+                                    <button type="submit" name="dangnhap" class="btn btn-primary btn-user btn-block">
                                         Đăng nhập
                                     </button>
                                 </form>
