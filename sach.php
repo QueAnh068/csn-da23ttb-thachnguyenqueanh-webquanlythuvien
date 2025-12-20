@@ -86,7 +86,7 @@ $result = mysqli_query($conn, $sql);
                                         <td>{$row['TenSach']}</td>
                                         <td>{$row['TenTG']}</td>
                                         <td>
-                                            <img src='../image/{$row['AnhBia']}'
+                                            <img src=admin/image/{$row['AnhBia']}'
                                                 alt='Ảnh bìa'
                                                 style='width: 80px; height: 120px; object-fit: cover;'>
                                         </td>
