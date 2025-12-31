@@ -1,0 +1,42 @@
+/* dashboard */
+/* ===== Dashboard pastel cho AdminLTE 3 ===== */
+
+/* ===== FIX triệt để màu small-box AdminLTE 3 ===== */
+
+.small-box {
+  background-image: none !important;
+}
+
+/* Books */
+.small-box.bg-soft-blue {
+  background: #CFE2F3 !important;
+  color: #1f2d3d !important;
+}
+
+/* Members */
+.small-box.bg-soft-green {
+  background: #D4EDDA !important;
+  color: #1f2d3d !important;
+}
+
+/* Borrow / Return */
+.small-box.bg-soft-yellow {
+  background: #FFF3CD !important;
+  color: #1f2d3d !important;
+}
+
+/* Violations */
+.small-box.bg-soft-pink {
+  background: #F8D7DA !important;
+  color: #1f2d3d !important;
+}
+
+/* icon mờ */
+.small-box .icon {
+  color: rgba(31, 45, 61, 0.25) !important;
+}
+
+/* footer */
+.small-box-footer {
+  color: #1f2d3d !important;
+}
