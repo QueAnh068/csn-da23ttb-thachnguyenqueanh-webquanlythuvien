@@ -1,0 +1,197 @@
+
+/* Phần index */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* --- HEADER --- */
+header {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Tiêu đề */
+header h1 {
+  font-weight: 800;
+  font-size: clamp(1.5rem, 2vw + 1rem, 2.3rem); /* kích thước chữ responsive */
+  letter-spacing: 1px; /* tăng khoảng cách giữa chữ */
+  text-shadow: 0 0 6px rgba(255,255,255,0.4);
+  white-space: nowrap;  /* không xuống hàng */
+ 
+}
+
+/* Logo */
+header img {
+  border-radius: 10px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+}
+
+/* Thanh menu */
+.navbar {
+  background: #0d6efd;
+}
+
+.navbar .nav-link {
+  color: #fff !important;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.navbar .nav-link:hover,
+.navbar .dropdown-toggle:hover {
+  color: #ffeb3b !important; /* vàng nhẹ khi hover */
+}
+
+/* Dropdown */
+.dropdown-menu {
+  background-color: #fff;
+  border: 1px solid #0d6efd;
+}
+
+.dropdown-item:hover {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+/* Ô tìm kiếm */
+form .form-control {
+  border-radius: 5px;
+  border: none;
+}
+
+form .btn {
+  border-radius: 5px;
+}
+
+/* Icon người dùng */
+.user-dropdown i {
+  transition: 0.3s;
+}
+
+.user-dropdown i:hover {
+  color: #ffeb3b;
+}
+
+footer {
+    background-color: #0d6efd;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+    font-size: 15px;
+}
+footer p {
+    margin: 6px 0;
+}
+
+/* Phần login */
+.login{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* nút */
+button {
+    background: white;
+    border: 1px solid #ccc;
+    color: black;
+    padding: 6px 12px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.4s;
+    border-radius: 8px;
+}
+
+button:hover {
+    background-color: #04AA6D;
+    color: white;
+    border-color: #04AA6D;
+}
+
+
+/* * */
+.error { 
+    color: red; font-size: 0.9em; 
+}
+
+/* tg */
+.books .border {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.books .border:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+
+/* căn giữ nội dung header */
+.container-fluid h1 {
+    text-align: center;
+    margin-left: 50px;
+}
+
+body {
+  background: linear-gradient(180deg, #e3f2fd, #ffffff);
+  min-height: 100vh; /* chiều cao màn hình */  
+  display: flex;
+  flex-direction: column;
+}
+
+/* Căn giữa form */
+.login-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 10px;
+}
+
+/* Khung form */
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+}
+
+.login-box:hover {
+  transform: translateY(-3px);
+}
+
+/* Tiêu đề */
+.login-box h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Input */
+.login-box .form-control {
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: border-color 0.2s ease;
+}
+
+.login-box .form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 4px rgba(13, 110, 253, 0.3);
+}
+
+/* Nút nuts caajp nhataj */
+.login-box button {
+  border-radius: 8px;
+  font-size: 16px;
+  padding: 10px;
+  transition: 0.3s;
+}
+
+.login-box button:hover {
+  background-color: #0a58ca;
+}
+
