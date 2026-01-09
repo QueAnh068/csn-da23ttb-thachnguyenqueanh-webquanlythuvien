@@ -70,15 +70,13 @@
     5. Ghi bản ghi mượn
     ============================= */
     $ngayMuon = date("Y-m-d");
-    $hanTra   = date("Y-m-d", strtotime($ngayMuon . " +20 days"));
 
     $sql_insert = "INSERT INTO ql_muontra 
-    (IDuser, IDsach, NgayMuon, HanTra, NgayTra, TrangThai)
-    VALUES (?, ?, ?, ?, NULL, 'Đang mượn')";
+    (IDuser, IDsach, NgayMuon,  NgayTra, TrangThai)
+    VALUES (?, ?, ?, NULL, 'Đang mượn')";
 
     $stmt_insert = $conn->prepare($sql_insert);
-    $stmt_insert->bind_param("iiss", $id_user, $id_sach, $ngayMuon, $hanTra);
-
+    $stmt_insert->bind_param("iis", $id_user, $id_sach, $ngayMuon);
     if ($stmt_insert->execute()) {
 
         $sql_update = "UPDATE ql_sach SET SoLuong = SoLuong - 1 WHERE ID = ?";
